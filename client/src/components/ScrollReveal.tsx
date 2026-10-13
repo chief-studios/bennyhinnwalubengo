@@ -23,13 +23,14 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,
   variant = 'fade-up',
   delay = 0,
-  duration = 800,
-  threshold = 0.12,
+  duration = 750,
+  threshold = 0.02,
   className = '',
   as: Component = 'div',
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const elementRef = useRef<HTMLElement | null>(null);
+  const [effectiveDelay, setEffectiveDelay] = useState(delay);
 
   useEffect(() => {
     // Check if user prefers reduced motion
@@ -39,33 +40,70 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          // Once revealed, unobserve to maintain high performance
-          if (elementRef.current) {
-            observer.unobserve(elementRef.current);
-          }
-        }
-      },
-      {
-        threshold,
-        rootMargin: '0px 0px -40px 0px',
-      }
-    );
+    const isMobile = window.innerWidth < 768;
+    // On small screens, reduce long desktop stagger delays so items animate immediately upon scroll
+    setEffectiveDelay(isMobile ? Math.min(delay, 80) : delay);
 
-    const currentEl = elementRef.current;
-    if (currentEl) {
-      observer.observe(currentEl);
+    // Initial check in case element is already in view on load
+    const checkIfInView = () => {
+      if (!elementRef.current) return false;
+      const rect = elementRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      // Trigger when element top enters the viewport (with generous buffer for mobile)
+      const buffer = isMobile ? 30 : -20;
+      if (rect.top <= windowHeight + buffer && rect.bottom >= 0) {
+        setIsVisible(true);
+        return true;
+      }
+      return false;
+    };
+
+    if (checkIfInView()) {
+      return;
     }
 
-    return () => {
+    // IntersectionObserver with responsive rootMargin & threshold
+    const hasIntersectionObserver = typeof window !== 'undefined' && 'IntersectionObserver' in window;
+    if (hasIntersectionObserver) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting || entry.intersectionRatio > 0) {
+              setIsVisible(true);
+              if (elementRef.current) {
+                observer.unobserve(elementRef.current);
+              }
+            }
+          });
+        },
+        {
+          threshold: isMobile ? 0.01 : threshold,
+          rootMargin: isMobile ? '0px 0px 40px 0px' : '0px 0px -20px 0px',
+        }
+      );
+
+      const currentEl = elementRef.current;
       if (currentEl) {
-        observer.unobserve(currentEl);
+        observer.observe(currentEl);
       }
-    };
-  }, [threshold]);
+
+      return () => {
+        if (currentEl) {
+          observer.unobserve(currentEl);
+        }
+      };
+    } else {
+      // Fallback scroll listener for environments without IntersectionObserver
+      const handleScroll = () => {
+        if (checkIfInView()) {
+          window.removeEventListener('scroll', handleScroll);
+        }
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+    }
+  }, [delay, threshold]);
+
 
   const getVariantClass = () => {
     switch (variant) {
@@ -89,7 +127,7 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
 
   const style: React.CSSProperties = {
     transitionDuration: `${duration}ms`,
-    transitionDelay: `${delay}ms`,
+    transitionDelay: `${effectiveDelay}ms`,
   };
 
   return (
