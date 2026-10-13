@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NAV_ITEMS } from '../data/content';
 import { ArrowRight, CheckCircle2, Mail } from 'lucide-react';
+import { ScrollReveal } from './ScrollReveal';
 
 export const Footer: React.FC = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
@@ -59,8 +60,9 @@ export const Footer: React.FC = () => {
     >
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
         {/* Contact / Event Booking Direct Portal */}
-        <div className="mb-20 pb-20 border-b border-white/10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        <ScrollReveal variant="fade-up">
+          <div className="mb-20 pb-20 border-b border-white/10">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             <div className="lg:col-span-5">
               <div className="inline-flex items-center gap-2 mb-4">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
@@ -200,10 +202,12 @@ export const Footer: React.FC = () => {
             </div>
           </div>
         </div>
+        </ScrollReveal>
 
         {/* 3-Column Midnight Footer */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16">
-          {/* Column 1: Join the Vision Newsletter */}
+        <ScrollReveal variant="fade-up" delay={150}>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16">
+            {/* Column 1: Join the Vision Newsletter */}
           <div className="md:col-span-5 space-y-4">
             <h4 className="font-serif text-2xl font-bold text-white tracking-tight">
               Join the Vision.
@@ -348,6 +352,7 @@ export const Footer: React.FC = () => {
             </div>
           </div>
         </div>
+        </ScrollReveal>
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-white/50 font-sans">

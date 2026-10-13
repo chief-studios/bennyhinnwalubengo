@@ -1,6 +1,7 @@
 import React from 'react';
 import { SPEAKING_TOPICS } from '../data/content';
 import { Calendar, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { ScrollReveal } from './ScrollReveal';
 
 interface SpeakingSectionProps {
   onOpenBookingModal?: () => void;
@@ -16,7 +17,7 @@ export const SpeakingSection: React.FC<SpeakingSectionProps> = ({ onOpenBookingM
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 md:mb-20">
-          <div className="max-w-2xl">
+          <ScrollReveal variant="fade-up" className="max-w-2xl">
             <div className="inline-flex items-center gap-2 mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
               <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold">
@@ -30,9 +31,9 @@ export const SpeakingSection: React.FC<SpeakingSectionProps> = ({ onOpenBookingM
                 Transforming Culture.
               </span>
             </h2>
-          </div>
+          </ScrollReveal>
 
-          <div className="flex-shrink-0">
+          <ScrollReveal variant="fade-up" delay={150} className="flex-shrink-0">
             <button
               type="button"
               onClick={() => {
@@ -49,73 +50,79 @@ export const SpeakingSection: React.FC<SpeakingSectionProps> = ({ onOpenBookingM
               <span>Inquire for Speaking</span>
               <ArrowUpRight className="w-4 h-4 text-[#0A1128]" />
             </button>
-          </div>
+          </ScrollReveal>
         </div>
 
-        {/* 3-Column Speaking Topics Grid */}
+        {/* 3-Column Speaking Topics Grid with Staggered Scroll Reveal */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          {SPEAKING_TOPICS.map((topic) => (
-            <div
+          {SPEAKING_TOPICS.map((topic, index) => (
+            <ScrollReveal
               key={topic.number}
-              className="group bg-[#1A1A1A] p-8 sm:p-10 border border-white/10 hover:border-[#D4AF37]/50 rounded-sm transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 shadow-lg hover:shadow-2xl hover:shadow-[#D4AF37]/5"
+              variant="fade-up"
+              delay={index * 150}
+              className="h-full"
             >
-              <div>
-                <div className="flex items-center justify-between mb-8">
-                  <span className="font-serif text-3xl font-light text-[#D4AF37]/60 group-hover:text-[#D4AF37] transition-colors">
-                    {topic.number}
-                  </span>
-                  <span className="w-8 h-[1px] bg-white/20 group-hover:w-12 group-hover:bg-[#D4AF37] transition-all duration-300" />
+              <div className="group bg-[#1A1A1A] p-8 sm:p-10 border border-white/10 hover:border-[#D4AF37]/50 rounded-sm transition-all duration-300 flex flex-col justify-between hover:-translate-y-1 shadow-lg hover:shadow-2xl hover:shadow-[#D4AF37]/5 h-full">
+                <div>
+                  <div className="flex items-center justify-between mb-8">
+                    <span className="font-serif text-3xl font-light text-[#D4AF37]/60 group-hover:text-[#D4AF37] transition-colors">
+                      {topic.number}
+                    </span>
+                    <span className="w-8 h-[1px] bg-white/20 group-hover:w-12 group-hover:bg-[#D4AF37] transition-all duration-300" />
+                  </div>
+
+                  <h3 className="font-serif text-2xl font-bold text-[#F8F9FA] group-hover:text-white transition-colors mb-3 leading-snug">
+                    {topic.title}
+                  </h3>
+
+                  <p className="font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-medium mb-4">
+                    {topic.subtitle}
+                  </p>
+
+                  <p className="font-sans text-sm text-[#F8F9FA]/70 leading-relaxed font-light mb-8">
+                    {topic.description}
+                  </p>
                 </div>
 
-                <h3 className="font-serif text-2xl font-bold text-[#F8F9FA] group-hover:text-white transition-colors mb-3 leading-snug">
-                  {topic.title}
-                </h3>
-
-                <p className="font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-medium mb-4">
-                  {topic.subtitle}
-                </p>
-
-                <p className="font-sans text-sm text-[#F8F9FA]/70 leading-relaxed font-light mb-8">
-                  {topic.description}
-                </p>
+                <div className="pt-6 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
+                  <span className="tracking-wide">Focus:</span>
+                  <span className="text-white/80 font-medium text-right">
+                    {topic.targetAudience}
+                  </span>
+                </div>
               </div>
-
-              <div className="pt-6 border-t border-white/10 flex items-center justify-between text-xs text-white/50">
-                <span className="tracking-wide">Focus:</span>
-                <span className="text-white/80 font-medium text-right">
-                  {topic.targetAudience}
-                </span>
-              </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
 
         {/* Event Formats Banner */}
-        <div className="bg-[#0A1128] border border-white/10 p-8 sm:p-10 rounded-sm flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div className="space-y-2 text-center lg:text-left">
-            <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#F8F9FA]">
-              Available for Global & Pan-African Engagements
-            </h4>
-            <p className="font-sans text-sm text-[#F8F9FA]/70 max-w-xl">
-              Keynotes, corporate retreats, executive debates, academic commencement addresses, and leadership workshops delivered in person or virtually.
-            </p>
-          </div>
+        <ScrollReveal variant="fade-up" delay={200}>
+          <div className="bg-[#0A1128] border border-white/10 p-8 sm:p-10 rounded-sm flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="space-y-2 text-center lg:text-left">
+              <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#F8F9FA]">
+                Available for Global & Pan-African Engagements
+              </h4>
+              <p className="font-sans text-sm text-[#F8F9FA]/70 max-w-xl">
+                Keynotes, corporate retreats, executive debates, academic commencement addresses, and leadership workshops delivered in person or virtually.
+              </p>
+            </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-white/80">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
-              <span>Full-Day Leadership Retreats</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
-              <span>Executive Oratory Coaching</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
-              <span>National Conventions</span>
+            <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-white/80">
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
+                <span>Full-Day Leadership Retreats</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
+                <span>Executive Oratory Coaching</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-[#D4AF37]" />
+                <span>National Conventions</span>
+              </div>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { CORE_METRICS } from '../data/content';
 import { ShieldCheck, Mic2, ArrowRight } from 'lucide-react';
+import { ScrollReveal } from './ScrollReveal';
 
 interface AboutSectionProps {
   onOpenBookingModal?: () => void;
@@ -19,7 +20,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBookingModal }
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         {/* Section Header */}
-        <div className="max-w-3xl mb-16 md:mb-20">
+        <ScrollReveal variant="fade-up" className="max-w-3xl mb-16 md:mb-20">
           <div className="inline-flex items-center gap-2 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
             <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold">
@@ -33,12 +34,16 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBookingModal }
               Africa’s Next Decade.
             </span>
           </h2>
-        </div>
+        </ScrollReveal>
 
         {/* Two-Column Editorial Story */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-20">
           {/* Left Column: Authoritative Editorial Text */}
-          <div className="lg:col-span-7 space-y-6 text-[#F8F9FA]/80 font-sans text-base sm:text-lg leading-relaxed font-light">
+          <ScrollReveal
+            variant="fade-up"
+            delay={150}
+            className="lg:col-span-7 space-y-6 text-[#F8F9FA]/80 font-sans text-base sm:text-lg leading-relaxed font-light"
+          >
             <p className="text-xl sm:text-2xl font-serif text-[#F8F9FA] leading-snug">
               Leadership is neither an accidental title nor an inherited privilege. It is an intentional, rigorous assignment to forge clarity where others only produce noise.
             </p>
@@ -71,35 +76,37 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBookingModal }
                 </button>
               )}
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: Pull Quote & Credibility Badges */}
           <div className="lg:col-span-5 space-y-8">
             {/* Editorial Pull Quote Box */}
-            <div className="bg-[#121212] p-8 md:p-10 border border-white/10 relative rounded-sm shadow-xl">
-              <div className="absolute top-4 right-6 text-5xl font-serif text-[#D4AF37]/20 select-none">
-                “
-              </div>
-              <p className="font-serif text-xl sm:text-2xl text-[#F8F9FA] italic leading-relaxed mb-6">
-                “When an entire generation masters both the courage of their convictions and the eloquence of their speech, nations don’t just change—they are rebuilt.”
-              </p>
-              <div className="border-t border-white/10 pt-4 flex items-center justify-between">
-                <div>
-                  <h4 className="font-sans font-semibold text-sm text-white tracking-wide">
-                    Bennyhinn Walubengo
-                  </h4>
-                  <p className="font-sans text-xs text-[#D4AF37] tracking-wider uppercase">
-                    Author of SPROUT
-                  </p>
+            <ScrollReveal variant="slide-left" delay={200}>
+              <div className="bg-[#121212] p-8 md:p-10 border border-white/10 relative rounded-sm shadow-xl">
+                <div className="absolute top-4 right-6 text-5xl font-serif text-[#D4AF37]/20 select-none">
+                  “
                 </div>
-                <div className="w-8 h-8 rounded-full border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] text-xs font-serif font-bold">
-                  BW
+                <p className="font-serif text-xl sm:text-2xl text-[#F8F9FA] italic leading-relaxed mb-6">
+                  “When an entire generation masters both the courage of their convictions and the eloquence of their speech, nations don’t just change—they are rebuilt.”
+                </p>
+                <div className="border-t border-white/10 pt-4 flex items-center justify-between">
+                  <div>
+                    <h4 className="font-sans font-semibold text-sm text-white tracking-wide">
+                      Bennyhinn Walubengo
+                    </h4>
+                    <p className="font-sans text-xs text-[#D4AF37] tracking-wider uppercase">
+                      Author of SPROUT
+                    </p>
+                  </div>
+                  <div className="w-8 h-8 rounded-full border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] text-xs font-serif font-bold">
+                    BW
+                  </div>
                 </div>
               </div>
-            </div>
+            </ScrollReveal>
 
             {/* Strategic Pillars */}
-            <div className="grid grid-cols-2 gap-4">
+            <ScrollReveal variant="fade-up" delay={300} className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-white/[0.02] border border-white/10 rounded-sm">
                 <ShieldCheck className="w-5 h-5 text-[#D4AF37] mb-2" />
                 <h5 className="font-sans font-semibold text-sm text-white mb-1">
@@ -119,14 +126,19 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBookingModal }
                   Award-winning rhetoric and persuasive discourse.
                 </p>
               </div>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
 
-        {/* Metrics Grid */}
+        {/* Metrics Grid with staggered reveals */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 border-t border-white/10">
-          {CORE_METRICS.map((metric) => (
-            <div key={metric.label} className="flex flex-col">
+          {CORE_METRICS.map((metric, index) => (
+            <ScrollReveal
+              key={metric.label}
+              variant="fade-up"
+              delay={100 + index * 100}
+              className="flex flex-col"
+            >
               <span className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#D4AF37] tracking-tight">
                 {metric.value}
               </span>
@@ -136,7 +148,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onOpenBookingModal }
               <span className="font-sans text-xs text-[#F8F9FA]/50 mt-1">
                 {metric.detail}
               </span>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { PODCAST_EPISODES } from '../data/content';
 import type { PodcastEpisode } from '../types';
 import { Play, Clock } from 'lucide-react';
+import { ScrollReveal } from './ScrollReveal';
 
 interface PodcastSectionProps {
   onPlayEpisode: (episode: PodcastEpisode) => void;
@@ -25,7 +26,7 @@ export const PodcastSection: React.FC<PodcastSectionProps> = ({
 
       <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 relative z-10">
         {/* Section Header */}
-        <div className="max-w-3xl mb-16 md:mb-20">
+        <ScrollReveal variant="fade-up" className="max-w-3xl mb-16 md:mb-20">
           <div className="inline-flex items-center gap-2 mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
             <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-[#D4AF37] font-semibold">
@@ -72,105 +73,109 @@ export const PodcastSection: React.FC<PodcastSectionProps> = ({
               <span>Apple Podcasts</span>
             </a>
           </div>
-        </div>
+        </ScrollReveal>
 
-        {/* Latest Episodes 3-Column Card Grid */}
+        {/* Latest Episodes 3-Column Card Grid with Staggered Scroll Reveal */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {PODCAST_EPISODES.map((ep) => {
+          {PODCAST_EPISODES.map((ep, index) => {
             const isCurrentlyPlaying = activeEpisodeId === ep.id && isPlaying;
 
             return (
-              <article
+              <ScrollReveal
                 key={ep.id}
-                className="group relative bg-[#121212] border border-white/10 hover:border-[#D4AF37]/50 rounded-sm overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#D4AF37]/10"
+                variant="fade-up"
+                delay={index * 150}
+                className="h-full"
               >
-                {/* Thumbnail Image Container */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/40">
-                  <img
-                    src={ep.imageUrl}
-                    alt={ep.imageAlt}
-                    className="w-full h-full object-cover transition-all duration-700 ease-out saturate-[0.6] grayscale-[0.35] group-hover:saturate-100 group-hover:grayscale-0 group-hover:scale-105"
-                    loading="lazy"
-                  />
+                <article className="group relative bg-[#121212] border border-white/10 hover:border-[#D4AF37]/50 rounded-sm overflow-hidden flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#D4AF37]/10 h-full">
+                  {/* Thumbnail Image Container */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-black/40">
+                    <img
+                      src={ep.imageUrl}
+                      alt={ep.imageAlt}
+                      className="w-full h-full object-cover transition-all duration-700 ease-out saturate-[0.6] grayscale-[0.35] group-hover:saturate-100 group-hover:grayscale-0 group-hover:scale-105"
+                      loading="lazy"
+                    />
 
-                  {/* Dark Vignette / Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/40 to-transparent" />
+                    {/* Dark Vignette / Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#121212] via-[#121212]/40 to-transparent" />
 
-                  {/* Top Badges */}
-                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-                    <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-1 bg-[#0A1128]/80 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/30 rounded-xs">
-                      {ep.number}
-                    </span>
-
-                    <span className="font-sans text-[10px] uppercase tracking-[0.16em] px-2.5 py-1 bg-white/10 backdrop-blur-md text-white/90 rounded-xs">
-                      {ep.category}
-                    </span>
-                  </div>
-
-                  {/* Gold Circular Play Button Overlay */}
-                  <button
-                    type="button"
-                    onClick={() => onPlayEpisode(ep)}
-                    aria-label={`Play episode ${ep.title}`}
-                    className="absolute inset-0 m-auto w-14 h-14 rounded-full bg-[#D4AF37] hover:bg-[#E3C45B] text-[#0A1128] flex items-center justify-center transition-all duration-300 shadow-xl shadow-black/60 group-hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white z-20"
-                  >
-                    {isCurrentlyPlaying ? (
-                      <span className="flex items-center gap-1">
-                        <span className="w-1 h-4 bg-[#0A1128] animate-bounce" />
-                        <span className="w-1 h-4 bg-[#0A1128] animate-bounce [animation-delay:0.2s]" />
-                        <span className="w-1 h-4 bg-[#0A1128] animate-bounce [animation-delay:0.4s]" />
+                    {/* Top Badges */}
+                    <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
+                      <span className="font-sans text-[10px] font-bold uppercase tracking-[0.2em] px-2.5 py-1 bg-[#0A1128]/80 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/30 rounded-xs">
+                        {ep.number}
                       </span>
-                    ) : (
-                      <Play className="w-5 h-5 fill-[#0A1128] ml-0.5" />
-                    )}
-                  </button>
-                </div>
 
-                {/* Card Content */}
-                <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
-                  <div>
-                    <div className="flex items-center gap-2 text-white/50 text-xs mb-3 font-sans">
-                      <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
-                      <span>{ep.duration}</span>
+                      <span className="font-sans text-[10px] uppercase tracking-[0.16em] px-2.5 py-1 bg-white/10 backdrop-blur-md text-white/90 rounded-xs">
+                        {ep.category}
+                      </span>
                     </div>
 
-                    <h3 className="font-serif text-2xl font-bold text-[#F8F9FA] group-hover:text-[#D4AF37] transition-colors leading-snug mb-3">
-                      {ep.title}
-                    </h3>
-
-                    <p className="font-sans text-xs sm:text-sm text-[#F8F9FA]/70 leading-relaxed font-light mb-6">
-                      {ep.description}
-                    </p>
-                  </div>
-
-                  {/* Bottom Action */}
-                  <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                    {/* Gold Circular Play Button Overlay */}
                     <button
                       type="button"
                       onClick={() => onPlayEpisode(ep)}
-                      className="font-sans text-xs uppercase tracking-[0.18em] text-[#D4AF37] hover:text-[#E3C45B] font-semibold transition-colors flex items-center gap-1.5 focus:outline-none"
+                      aria-label={`Play episode ${ep.title}`}
+                      className="absolute inset-0 m-auto w-14 h-14 rounded-full bg-[#D4AF37] hover:bg-[#E3C45B] text-[#0A1128] flex items-center justify-center transition-all duration-300 shadow-xl shadow-black/60 group-hover:scale-110 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white z-20"
                     >
-                      <span>{isCurrentlyPlaying ? 'Now Playing' : 'Listen Now'}</span>
+                      {isCurrentlyPlaying ? (
+                        <span className="flex items-center gap-1">
+                          <span className="w-1 h-4 bg-[#0A1128] animate-bounce" />
+                          <span className="w-1 h-4 bg-[#0A1128] animate-bounce [animation-delay:0.2s]" />
+                          <span className="w-1 h-4 bg-[#0A1128] animate-bounce [animation-delay:0.4s]" />
+                        </span>
+                      ) : (
+                        <Play className="w-5 h-5 fill-[#0A1128] ml-0.5" />
+                      )}
                     </button>
-                    <span className="text-[10px] uppercase font-sans tracking-widest text-white/40">
-                      The Hinnfluence
-                    </span>
                   </div>
-                </div>
-              </article>
+
+                  {/* Card Content */}
+                  <div className="p-6 sm:p-7 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 text-white/50 text-xs mb-3 font-sans">
+                        <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
+                        <span>{ep.duration}</span>
+                      </div>
+
+                      <h3 className="font-serif text-2xl font-bold text-[#F8F9FA] group-hover:text-[#D4AF37] transition-colors leading-snug mb-3">
+                        {ep.title}
+                      </h3>
+
+                      <p className="font-sans text-xs sm:text-sm text-[#F8F9FA]/70 leading-relaxed font-light mb-6">
+                        {ep.description}
+                      </p>
+                    </div>
+
+                    {/* Bottom Action */}
+                    <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                      <button
+                        type="button"
+                        onClick={() => onPlayEpisode(ep)}
+                        className="font-sans text-xs uppercase tracking-[0.18em] text-[#D4AF37] hover:text-[#E3C45B] font-semibold transition-colors flex items-center gap-1.5 focus:outline-none"
+                      >
+                        <span>{isCurrentlyPlaying ? 'Now Playing' : 'Listen Now'}</span>
+                      </button>
+                      <span className="text-[10px] uppercase font-sans tracking-widest text-white/40">
+                        The Hinnfluence
+                      </span>
+                    </div>
+                  </div>
+                </article>
+              </ScrollReveal>
             );
           })}
         </div>
 
         {/* Podcast host statement banner */}
-        <div className="mt-16 text-center max-w-2xl mx-auto">
+        <ScrollReveal variant="blur" delay={250} className="mt-16 text-center max-w-2xl mx-auto">
           <p className="font-serif text-sm sm:text-base italic text-[#F8F9FA]/60">
             “When we engage minds of consequence, we leave blueprints for a generation that will govern tomorrow.”
           </p>
           <p className="font-sans text-xs uppercase tracking-widest text-[#D4AF37] mt-2">
             — Bennyhinn Walubengo
           </p>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
